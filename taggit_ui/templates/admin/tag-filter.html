@@ -16,10 +16,6 @@
             <a href="{{ choice.only.query_string|iriencode }}" title="{{ choice.display }}"  style="display:inline;color:{% if choice.only.selected %}#5b80b2{% else %}#999{% endif %}">
                 {{ choice.display }}
             </a>
-            <a class="tagapi-delete" href="{{ choice.url_path }}" title="delete {{ choice.display }}"  style="display:inline;float:right;color:#999">
-                ×
-            </a>
-
         </li>
     {% endif %}
 {% endfor %}

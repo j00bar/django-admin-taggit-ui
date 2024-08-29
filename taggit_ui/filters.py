@@ -13,6 +13,7 @@ class TagFilter(admin.SimpleListFilter):
     title = 'Tags'
     parameter_name = 'tags'
     template = 'admin/tag-filter.html'
+    tagged_item_cls = TaggedItem
 
     def values(self):
         if self.value():
@@ -22,13 +23,12 @@ class TagFilter(admin.SimpleListFilter):
 
     def lookups(self, request, model_admin):
         choices = list()
-        for tag in TaggedItem.tags_for(model_admin.model):
+        for tag in self.tagged_item_cls.tags_for(model_admin.model):
             kwargs=dict(
                 tag_id=tag.id,
                 app_label=model_admin.model._meta.app_label,
                 model_name=model_admin.model._meta.model_name)
-            url_path = reverse('remove-tag', kwargs=kwargs)
-            choices.append((tag.name, url_path))
+            choices.append(tag.name)
         choices.sort()
         return choices
 
@@ -71,14 +71,13 @@ class TagFilter(admin.SimpleListFilter):
             'query_string': changelist.get_query_string({}, [self.parameter_name]),
             'display': _('All'),
         }
-        for tag, url_path in self.lookup_choices:
+        for tag in self.lookup_choices:
             lookup = tag
             plus_lookup = '+' + lookup
             minus_lookup = '-' + lookup
             values = [v.lstrip('+-') for v in self.values()]
             yield {
                 'display': tag,
-                'url_path': url_path,
                 'selected': self.value() and lookup in values,
                 'plus': {
                     'selected': self.value() and plus_lookup in self.values(),

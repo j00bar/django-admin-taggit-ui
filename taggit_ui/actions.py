@@ -54,6 +54,7 @@ class FlatModelTree(ModelTree):
 
 class TagManager:
     ACTION_NAME = 'set_or_remove_tags'
+    TagsForm = ManageTagsForm
 
     def __init__(self, tree_class=FlatModelTree):
         self.tree_class = type('Tree', (tree_class, TreeMixin), dict())
@@ -68,10 +69,10 @@ class TagManager:
         # Initialize forms.
         task = 'add' in request.POST and 'add' or 'remove' in request.POST and 'remove'
         if task:
-            tag_form = ManageTagsForm(request.POST)
+            tag_form = self.TagsForm(request.POST)
             include_form = include_form_class(request.POST)
         else:
-            tag_form = ManageTagsForm()
+            tag_form = self.TagsForm()
             include_form = include_form_class(initial=dict(root=True))
 
         # Render the forms.
