@@ -43,7 +43,7 @@ setup(
     package_data={'taggit_ui': ['templates/admin/*']},
     include_package_data=True,
     install_requires=[
-        "Django<=4.2",
+        "Django>=4.2,<5",
         "django-taggit",
         "djangorestframework",
         "django-modeltree>=0.3",
